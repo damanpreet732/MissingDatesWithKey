@@ -1,0 +1,69 @@
+import java.text.*;
+import java.util.*;
+import static java.lang.String.format;
+
+public class GFG
+{
+    public static void MissingDatesWithKey (String d1 , String d2)throws ParseException
+    {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        
+        int key1 = Integer.valueOf(d1.split(":")[1]);
+        int key2 = Integer.valueOf(d2.split(":")[1]);
+        
+        String date1 = d1.split(":")[0] ;
+        String date2 = d2.split(":")[0] ;
+        
+        Date dateBefore = format.parse(date1);
+        Date dateAfter = format.parse(date2);
+        long difference = dateAfter.getTime() - dateBefore.getTime();
+        int noofdays = (int)(difference / (1000*60*60*24));
+        //System.out.println(noofdays);
+        //System.out.println(key2-key1);
+        int addValue = (key2-key1)/noofdays ;
+        //System.out.println(addValue);
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(format.parse(date1));
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(format.parse(date2));
+
+        Date currentDate = cal1.getTime();
+        //System.out.println(format.format(currentDate));
+        while(!currentDate.equals(cal2.getTime()))
+        {
+            cal1.add(Calendar.DAY_OF_MONTH, 1);
+            currentDate = cal1.getTime();
+            System.out.print(format.format(currentDate));
+            key1 += addValue ;
+            System.out.println(":"+key1);
+        }
+    }
+    public static void main(String args[])
+    {
+        Scanner input =new Scanner(System.in);
+        int n = input.nextInt();
+        String dates [] = new String [n] ;
+        
+        if(n==0) System.out.println("Enter at least two dates to find missing Dates");
+        if(n == 1) System.out.println(input.next());
+        if(n>1)
+        {
+            dates[0] = input.next();
+            System.out.println(dates[0]);
+            for(int i=1;i<n;i++)
+            {
+                dates[i] = input.next();
+                try
+                {
+                    MissingDatesWithKey(dates[i-1] , dates[i]);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                    //System.out.println();
+                }
+            }
+        }
+    }
+}
